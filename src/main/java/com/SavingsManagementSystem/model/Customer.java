@@ -25,7 +25,7 @@ public class Customer {
     private String lastName;
 
     @Column(name = "id_number", length = 60, unique = true, nullable = true)
-    private int idNumber;
+    private Integer idNumber;
 
     @Column(name = "phone_number", length = 60, nullable = false, unique = true)
     private String phoneNumber;
@@ -35,8 +35,5 @@ public class Customer {
 
     @Column(name = "email", length = 180, nullable = false, unique = true)
     private String email;
-
-    @Column(length = 80, unique = true)
-    private String accountNo;
 
 }

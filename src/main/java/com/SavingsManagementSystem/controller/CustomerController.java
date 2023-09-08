@@ -2,84 +2,82 @@ package com.SavingsManagementSystem.controller;
 
 import com.SavingsManagementSystem.Response.RestResponse;
 import com.SavingsManagementSystem.model.Customer;
-import com.SavingsManagementSystem.repository.CustomerRepo;
+import com.SavingsManagementSystem.service.CustomerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api/customer")
 @Slf4j
-
 public class CustomerController {
 
     @Autowired
-    CustomerRepo customerRepo;
+    CustomerService customerService;
 
-    @GetMapping("/get_all")
+    @GetMapping("/get_allCustomers")
     public ResponseEntity<List<Customer>> getAllCustomers() {
-        try {
-            List<Customer> customers = customerRepo.findAll();
+
+        try{
+            List<Customer> customers = customerService.getAllCustomers();
             return new ResponseEntity<>(customers, HttpStatus.OK);
-        } catch (Exception e) {
-            log.error("Error occurred while retrieving customers: {}", e.getMessage(), e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }catch (Exception e){
+            log.error("Error occurred while retrieving customers ", e);
+            return new ResponseEntity(new RestResponse( true, "Error occurred"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
     }
 
-    @GetMapping("/get_customer/{customerId}")
-    public ResponseEntity<?> getCustomerById(@PathVariable Long customerId) {
-        try {
-            Optional<Customer> customer = customerRepo.findById(customerId);
-            if (customer.isPresent()) {
-                return new ResponseEntity<>(customer.get(), HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(new RestResponse(true, "Customer not found"), HttpStatus.NOT_FOUND);
-            }
-        } catch (Exception e) {
-            log.error("Error occurred while retrieving customer with ID {}: {}", customerId, e.getMessage(), e);
-            return new ResponseEntity<>(new RestResponse(true, "Error occurred"), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @GetMapping("/get_customer/{id}")
+    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
+        Customer customer = customerService.getCustomerById(id);
+        return new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
     @PostMapping("/create_customer")
-    public ResponseEntity<RestResponse> createCustomer(@RequestBody Customer customer) {
-        try {
-            log.info("Creating customer: {}", customer);
-            customerRepo.save(customer);
-            return new ResponseEntity<>(new RestResponse(false, "Customer created"), HttpStatus.OK);
-        } catch (Exception e) {
-            log.error("Error occurred while creating customer: {}", e.getMessage(), e);
-            return new ResponseEntity<>(new RestResponse(true, "Error occurred"), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
+
+        try{
+            Customer createdCustomer = customerService.createCustomer(customer);
+            return new ResponseEntity<>(createdCustomer, HttpStatus.CREATED);
+        }catch (Exception e){
+            log.error("Error occurred while creating Customer", e);
+            return new ResponseEntity(new RestResponse( true, "Error occurred"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PutMapping("/update_customer")
-    public ResponseEntity<RestResponse> updateCustomer(@RequestBody Customer customer) {
-        try {
-            log.info("Updating customer: {}", customer);
-            customerRepo.save(customer);
-            return new ResponseEntity<>(new RestResponse(false, "Customer updated"), HttpStatus.OK);
-        } catch (Exception e) {
-            log.error("Error occurred while updating customer: {}", e.getMessage(), e);
-            return new ResponseEntity<>(new RestResponse(true, "Error occurred"), HttpStatus.INTERNAL_SERVER_ERROR);
+    @PutMapping("/update_customer/{id}")
+    public ResponseEntity<Customer> updateCustomer(
+            @PathVariable Long id,
+            @RequestBody Customer updatedCustomer) {
+
+        try{
+            Customer updated = customerService.updateCustomer(id, updatedCustomer);
+            return new ResponseEntity(new RestResponse(false, "Customer Updated successfully"), HttpStatus.OK);
+        }catch (Exception e){
+            log.error("Error occurred while creating Customer ", e);
+            return new ResponseEntity(new RestResponse( true, "Error occurred"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @DeleteMapping("/delete_customer/{customerId}")
-    public ResponseEntity<RestResponse> deleteCustomer(@PathVariable Long customerId) {
-        try {
-            log.info("Deleting customer with ID: {}", customerId);
-            customerRepo.deleteById(customerId);
-            return new ResponseEntity<>(new RestResponse(false, "Customer deleted"), HttpStatus.OK);
-        } catch (Exception e) {
-            log.error("Error occurred while deleting customer: {}", e.getMessage(), e);
-            return new ResponseEntity<>(new RestResponse(true, "Error occurred"), HttpStatus.INTERNAL_SERVER_ERROR);
+    @DeleteMapping("/delete_customer/{id}")
+    public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
+
+        try{
+            customerService.deleteCustomer(id);
+            return new ResponseEntity(new RestResponse(false, "Customer deleted Successfully"), HttpStatus.OK);
+        }catch (Exception e){
+            log.error("Error occurred while deleting customer ", e);
+            return new ResponseEntity(new RestResponse(true, "Error occurred"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }
+
