@@ -7,10 +7,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CustomerRepo extends JpaRepository<Customer, Long> {
 
+    Customer findByLastName(String lastName);
+    Customer findByFirstName(String firstname);
     Customer findByEmail(String email);
     Customer findByMemberNumber(String memberNumber);
     Customer findByPhoneNumber(String phoneNumber);
     Customer findByIdNumber(int idNumber);
-    Customer findByLastName(String lastName);
-    Customer findByFirstName(String firstname);
+
 }
