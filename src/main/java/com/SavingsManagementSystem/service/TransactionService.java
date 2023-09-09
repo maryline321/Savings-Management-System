@@ -41,4 +41,15 @@ public class TransactionService {
         return totalSavings;
     }
 
+    public Double getTotalSavingsAmountAcrossAllUsers() {
+
+        List<Transaction> allTransactions = transactionRepo.findAll();
+
+        Double totalSavings = allTransactions.stream()
+                .mapToDouble(Transaction::getAmount)
+                .sum();
+
+        return totalSavings;
+    }
+
 }

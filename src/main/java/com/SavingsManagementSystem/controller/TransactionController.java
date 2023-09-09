@@ -60,6 +60,11 @@ public class TransactionController {
         return new ResponseEntity<>(totalSavings, HttpStatus.OK);
     }
 
+    @GetMapping("/total-savings")
+    public ResponseEntity<Double> getTotalSavingsAcrossAllUsers() {
+        Double totalSavings = transactionService.getTotalSavingsAmountAcrossAllUsers();
+        return new ResponseEntity<>(totalSavings, HttpStatus.OK);
+    }
 
 
 }
