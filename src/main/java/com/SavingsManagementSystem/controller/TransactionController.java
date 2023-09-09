@@ -38,7 +38,7 @@ public class TransactionController {
         Transaction transaction = transactionService.getTransactionById(id);
         return new ResponseEntity<>(transaction, HttpStatus.OK);
     }
-    @PostMapping("/customer/{customerId}")
+    @PostMapping("/create_transaction/{customerId}")
     public ResponseEntity<Transaction> createTransactionForCustomer(
             @PathVariable Long customerId,
             @RequestBody Transaction transaction) {
@@ -55,15 +55,30 @@ public class TransactionController {
     }
 
     @GetMapping("/{customerId}/total-savings")
-    public ResponseEntity<Double> getTotalSavingsForCustomer(@PathVariable Long customerId) {
-        Double totalSavings = transactionService.getTotalSavingsAmountForCustomer(customerId);
-        return new ResponseEntity<>(totalSavings, HttpStatus.OK);
+    public ResponseEntity<Double> customerTotalSavings(@PathVariable Long customerId) {
+
+        try{
+            Double totalSavings = transactionService.customerTotalSavings(customerId);
+            return new ResponseEntity<>(totalSavings, HttpStatus.OK);
+
+        }catch (Exception e){
+            log.error("Error occurred while creating transaction ", e);
+            return new ResponseEntity(new RestResponse( true, "Error occurred"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/total-savings")
-    public ResponseEntity<Double> getTotalSavingsAcrossAllUsers() {
-        Double totalSavings = transactionService.getTotalSavingsAmountAcrossAllUsers();
-        return new ResponseEntity<>(totalSavings, HttpStatus.OK);
+    public ResponseEntity<Double> totalSavingsAmount() {
+
+        try{
+            Double totalSavings = transactionService.totalSavingsAmount();
+            return new ResponseEntity<>(totalSavings, HttpStatus.OK);
+
+        }catch (Exception e){
+            log.error("Error occurred while creating transaction ", e);
+            return new ResponseEntity(new RestResponse( true, "Error occurred"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
 

@@ -30,7 +30,7 @@ public class TransactionService {
         return transactionRepo.save(transaction);
     }
 
-    public Double getTotalSavingsAmountForCustomer(Long customerId) {
+    public Double customerTotalSavings(Long customerId) {
 
         List<Transaction> transactions = transactionRepo.findByCustomerId(customerId);
 
@@ -41,7 +41,7 @@ public class TransactionService {
         return totalSavings;
     }
 
-    public Double getTotalSavingsAmountAcrossAllUsers() {
+    public Double totalSavingsAmount() {
 
         List<Transaction> allTransactions = transactionRepo.findAll();
 
