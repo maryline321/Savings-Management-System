@@ -54,6 +54,12 @@ public class TransactionController {
 
     }
 
+    @GetMapping("/{customerId}/total-savings")
+    public ResponseEntity<Double> getTotalSavingsForCustomer(@PathVariable Long customerId) {
+        Double totalSavings = transactionService.getTotalSavingsAmountForCustomer(customerId);
+        return new ResponseEntity<>(totalSavings, HttpStatus.OK);
+    }
+
 
 
 }

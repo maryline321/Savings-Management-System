@@ -30,4 +30,15 @@ public class TransactionService {
         return transactionRepo.save(transaction);
     }
 
+    public Double getTotalSavingsAmountForCustomer(Long customerId) {
+
+        List<Transaction> transactions = transactionRepo.findByCustomerId(customerId);
+
+        Double totalSavings = transactions.stream()
+                .mapToDouble(Transaction::getAmount)
+                .sum();
+
+        return totalSavings;
+    }
+
 }

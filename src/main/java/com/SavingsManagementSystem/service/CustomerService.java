@@ -26,30 +26,9 @@ public class CustomerService {
 
     public Customer createCustomer(Customer customer) {
 
-        Customer firstname = customerRepo.findByFirstName(customer.getFirstName());
-        if (firstname != null) {throw new DuplicateKeyException("Firstname already exists" );}
-
-        Customer lastName = customerRepo.findByLastName(customer.getLastName());
-        if (lastName != null) {throw new DuplicateKeyException("Lastname already exists" );}
-
-        Customer email = customerRepo.findByEmail(customer.getEmail());
-        if (email != null) { throw new DuplicateKeyException("email already exists. ");}
-
-        Customer memberNumber = customerRepo.findByMemberNumber(customer.getMemberNumber());
-        if (memberNumber != null) {
-            throw new DuplicateKeyException("member number already exists. " );}
-
-        Customer phoneNumber = customerRepo.findByPhoneNumber(customer.getPhoneNumber());
-        if (phoneNumber != null) {
-            throw new DuplicateKeyException("Phone number already exists."); }
-
-        Customer idNumber = customerRepo.findByIdNumber(customer.getIdNumber());
-        if (idNumber != null) {
-            throw new DuplicateKeyException("ID number already exists");}
-
-
         return customerRepo.save(customer);
     }
+
 
     public Customer updateCustomer(Long id, Customer updatedCustomer) {
         Customer currentCustomer = getCustomerById(id);
@@ -68,4 +47,6 @@ public class CustomerService {
         Customer currentCustomer = getCustomerById(id);
         customerRepo.delete(currentCustomer);
     }
+
+
 }
